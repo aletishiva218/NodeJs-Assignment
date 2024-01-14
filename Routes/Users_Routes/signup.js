@@ -19,6 +19,12 @@ const signup = (req,res) => {
 
     bcrypt.hash(req.body.password,10).then(async hashedPassword => {
         newUser.password = hashedPassword;
+        uploadAvatar(req, res, (err) => {
+            if (err) {
+              console.error(err);
+              return res.status(400).json({ error: err.message });
+            }
+        })
         if(newUser.role=="Admin") await adminModel.create(newUser)
          else await userModel.create(newUser)
         newUser.password = req.body.password;
