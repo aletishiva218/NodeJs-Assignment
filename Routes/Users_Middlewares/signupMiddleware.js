@@ -39,7 +39,7 @@ const signupMiddleware = {
     
         if(!req.body.role || req.body.role=="User")
         userExists = await userModel.findOne(userCredintials); 
-        else userExists = await userModel.findOne(userCredintials);
+        else userExists = await adminModel.findOne(userCredintials);
         
         if(userExists) return res.status(400).json({message:"registration failed",error:"already exists"})
         next()
