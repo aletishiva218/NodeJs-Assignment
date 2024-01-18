@@ -34,7 +34,7 @@ const login = async (req,res) => {
         }
 
         const token = jwt.sign(userSign,accessToken)
-        res.json({message:"login successfully",token:token})
+        res.json({status:"login success",token:token})
         
     }catch{(error)=>{
         res.status(400).json({error:error})

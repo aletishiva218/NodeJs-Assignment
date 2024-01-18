@@ -18,7 +18,7 @@ const delet = async (req,res) => {
             
             if(user.role == "Admin") await adminModel.deleteOne(usercredintials)
             else await userModel.deleteOne(usercredintials)
-            res.json({message:"deleted successfully"})
+            res.json({status:"Ok",message:"deleted successfully"})
         })
     }catch{(error)=>{
         res.status(400).json({error:error})

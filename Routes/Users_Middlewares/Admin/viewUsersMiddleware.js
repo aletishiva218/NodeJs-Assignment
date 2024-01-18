@@ -9,7 +9,7 @@ const viewUsersMiddleware = {
     token:(req,res,next)=>{
         const authHeader = req.headers["authorization"];
         const token = authHeader && authHeader.split(" ")[1];
-        if(!token) return res.status(400).json({error:"token not provided"})
+        if(!token) return res.status(400).json({status:"failed",message:"Token not provided"})
         next()
     },
     validToken:(req,res,next)=>{
@@ -24,7 +24,7 @@ const viewUsersMiddleware = {
         const authHeader = req.headers["authorization"];
         const token = authHeader && authHeader.split(" ")[1];
         jwt.verify(token,accessToken,(err,usercredintials)=>{
-            if(usercredintials.role!="Admin") return res.status(400).json({message:"access denied",error:"you are not admin"})
+            if(usercredintials.role!="Admin") return res.status(403).json({status:"failed",message:"You do not have permission to access this resource. Only administrators are authorized to fetch user data."})
             next();
         })
     },
@@ -39,7 +39,7 @@ const viewUsersMiddleware = {
             else usercredintialsNew.phone = usercredintials.phone;
            let userExists = await adminModel.findOne(usercredintialsNew)
 
-            if(!userExists) return res.status(400).json({message:"access denied",error:"you are not admin"})
+            if(!userExists) return res.status(404).json({status:"failed",message:"Admin not found. Please check your credentials and try again."})
     next();
         })
     }

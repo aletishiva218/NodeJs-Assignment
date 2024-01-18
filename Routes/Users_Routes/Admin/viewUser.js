@@ -9,7 +9,7 @@ const viewUser = async (req,res) => {
 
             let user = await userModel.findOne(userCredintials)
 
-            res.json(user)
+            res.json({status:"Ok",user:user})
     }catch{(error)=>{
         res.status(400).json({error:error})
     }}

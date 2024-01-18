@@ -5,7 +5,7 @@ const deleteAllUsers = async (req,res) => {
 
             await userModel.deleteMany({})
 
-            res.json({message:"deleted successfully"})
+            res.json({status:"Ok",message:"deleted successfully"})
             
     }catch{(error)=>{
         res.status(400).json({error:error})

@@ -4,7 +4,7 @@ import adminModel from "../../Database/Models/adminModel.js";
 
 const signupMiddleware = {
     emailOrPhone:(req,res,next)=>{
-        if(!req.body.email && !req.body.phone) return res.status(400).json({error:"phone number or email is required"})
+        if(!req.body.email && !req.body.phone) return res.status(400).json({status:"failed",message:"Phone number or email is required"})
         next()
     },
     details: (req,res,next)=>{
@@ -27,7 +27,7 @@ const signupMiddleware = {
                     if(errorPath == "password") displayErrors.push("password is required, must be string  and should be between 8 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character")
                     if(errorPath == "role") displayErrors.push("role must be 'Admin' or 'User'")
                 }
-                return res.status(400).json({error:displayErrors})
+                return res.status(422).json({status:"failed",error:displayErrors})
             }
             next()
     },
@@ -41,7 +41,7 @@ const signupMiddleware = {
         userExists = await userModel.findOne(userCredintials); 
         else userExists = await adminModel.findOne(userCredintials);
         
-        if(userExists) return res.status(400).json({message:"registration failed",error:"already exists"})
+        if(userExists) return res.status(400).json({status:"failed",message:"User with this credintials already exists"})
         next()
     }
 }

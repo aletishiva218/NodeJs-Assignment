@@ -22,7 +22,7 @@ const update = async (req,res) => {
 
             if(user.role == "Admin") await adminModel.updateOne(userCredintials,{$set:newData});      
             else await userModel.updateOne(userCredintials,{$set:newData})
-            res.json({message:"updated successfully"})
+            res.json({status:"Ok",message:"updated successfully"})
         })
     }catch{(error)=>{
         res.status(400).json({error:error})

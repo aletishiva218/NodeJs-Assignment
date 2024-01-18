@@ -10,7 +10,7 @@ const deleteMiddleware = {
     token:(req,res,next)=>{
         const authHeader = req.headers["authorization"];
         const token = authHeader && authHeader.split(" ")[1];
-        if(!token) return res.status(400).json({error:"token not provided"})
+        if(!token) return res.status(400).json({status:"failed",message:"Token not provided"})
         next()
     },
     validToken:(req,res,next)=>{
@@ -33,7 +33,7 @@ const deleteMiddleware = {
     
                 if(usercredintials.role=="User") userExists = await userModel.findOne(usercredintialsNew)
                 else userExists = await adminModel.findOne(usercredintialsNew)
-                if(!userExists) return res.status(400).json({message:"unable to delete data",error:"user not exists"})
+                if(!userExists) return res.status(404).json({status:"failed",message:"User not exists with these credintials"})
     next();
         })
     }

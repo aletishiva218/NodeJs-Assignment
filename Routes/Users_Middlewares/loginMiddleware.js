@@ -4,7 +4,7 @@ import adminModel from "../../Database/Models/adminModel.js";
 import Joi from "joi";
 const loginMiddleware = {
     emailOrPhone:(req,res,next)=>{
-        if(!req.body.email && !req.body.phone) return res.status(400).json({error:"phone number or email is required"})
+        if(!req.body.email && !req.body.phone) return res.status(400).json({status:"failed",message:"Phone number or email is required"})
         next()
     },
     details:(req,res,next)=>{
@@ -24,7 +24,7 @@ const loginMiddleware = {
                 if(errorPath == "phone") displayErrors.push("invalid phone number")
                 if(errorPath == "role") displayErrors.push("role must be 'Admin' or 'User'")
             }
-            return res.status(400).json({error:displayErrors})
+            return res.status(422).json({status:"error",error:displayErrors})
         }
         next();
     },
@@ -38,12 +38,12 @@ const loginMiddleware = {
         else userExists = await adminModel.findOne(userCredintials);
 
 
-        if(!userExists) return res.status(400).json({message:"access denied",error:"account not registered"})
+        if(!userExists) return res.status(404).json({status:"failed",message:"User not found. Please check your credintials and try again."})
         
             next();
     },
     passwordCheck:async (req,res,next)=>{
-        if(!req.body.password) return res.status(400).json({error:"password is required"})
+        if(!req.body.password) return res.status(400).json({status:"failed",message:"Password is required. Please provide a valid password"})
         
         const userCredintials = {};
         if(req.body.email) userCredintials.email = req.body.email; else userCredintials.phone = req.body.phone;
@@ -56,7 +56,7 @@ const loginMiddleware = {
         bcrypt.compare(req.body.password,userExists.password,(error,result)=>{
             if(error) return res.status(400).json({error:error})
 
-            if(!result) return res.status(400).json({message:"access denied",error:"incorrect password"})
+            if(!result) return res.status(401).json({status:"failed",message:"Incorrect password. Please verify your password and try again."})
             next();
         })
     }

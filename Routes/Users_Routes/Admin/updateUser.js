@@ -13,7 +13,7 @@ const updateUser = async (req,res) => {
 
             await userModel.updateOne(userCredintials,{$set:updateData})
             
-            res.json({message:"updated successfully"})
+            res.json({status:"Ok",message:"updated successfully"})
     }catch{(error)=>{
         res.status(400).json({error:error})
     }}

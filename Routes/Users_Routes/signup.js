@@ -31,7 +31,7 @@ const signup = (req,res) => {
         else userSign.phone = req.body.phone;
     
         const token = jwt.sign(userSign,accessToken)
-        res.json({message:"registration successfully",token:token})
+        res.json({status:"signup success",token:token})
     })
     }catch{(error)=>{
         res.status(400).json({error:error})

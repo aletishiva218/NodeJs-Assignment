@@ -28,7 +28,7 @@ const view = async (req,res) => {
             role:user.role
         }
         
-            res.json(displayData)
+            res.json({status:"Ok",data:displayData})
         })
     }catch{(error)=>{
         res.status(400).json({error:error})
