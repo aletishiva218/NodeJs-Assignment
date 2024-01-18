@@ -13,7 +13,7 @@ const signup = (req,res) => {
     try{
         let newUser = {};
         if(!req.body.name) newUser.name = " "; else newUser.name = req.body.name;
-        if(req.file) newUser.profilePath = req.headers.host+"/"+req.file.path.split("\\")[1];
+        if(req.file) newUser.profilePath = req.headers.host+"/"+req.file.path.split("/")[1];
         if(req.body.email) newUser.email = req.body.email; else newUser.phone = req.body.phone;
         if(!req.body.role) newUser.role = "User"; else newUser.role = req.body.role;
 

@@ -18,7 +18,7 @@ const update = async (req,res) => {
             
             const newData = {}
             if(req.body.name) newData.name = req.body.name;
-            if(req.file) newData.profilePath = req.headers.host+"/"+req.file.path.split("\\")[1];
+            if(req.file) newData.profilePath = req.headers.host+"/"+req.file.path.split("/")[1];
 
             if(user.role == "Admin") await adminModel.updateOne(userCredintials,{$set:newData});      
             else await userModel.updateOne(userCredintials,{$set:newData})
