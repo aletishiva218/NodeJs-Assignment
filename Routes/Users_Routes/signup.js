@@ -13,18 +13,13 @@ const signup = (req,res) => {
     try{
         let newUser = {};
         if(!req.body.name) newUser.name = " "; else newUser.name = req.body.name;
-        if(req.file) newUser.profilePath = req.file.path;
+        if(req.file) newUser.profilePath = req.headers.host+"/"+req.file.path.split("\\")[1];
         if(req.body.email) newUser.email = req.body.email; else newUser.phone = req.body.phone;
         if(!req.body.role) newUser.role = "User"; else newUser.role = req.body.role;
 
     bcrypt.hash(req.body.password,10).then(async hashedPassword => {
         newUser.password = hashedPassword;
-        uploadAvatar(req, res, (err) => {
-            if (err) {
-              console.error(err);
-              return res.status(400).json({ error: err.message });
-            }
-        })
+
         if(newUser.role=="Admin") await adminModel.create(newUser)
          else await userModel.create(newUser)
         newUser.password = req.body.password;

@@ -24,23 +24,32 @@ import uploadAvatar from "./Utils/uploadAvatar.js";
 
 import express from "express";
 import dotenv from "dotenv";
+import path from "path";
+import fs from "fs";
+import bodyParser from "body-parser";
+import multer from "multer";
 
 dotenv.config();
 const port = process.env.PORT || 4000;
+const _dirname = path.resolve();
+const profilePath = path.join(_dirname,"Avatars");
+fs.mkdirSync(profilePath,{recursive:true})
 
 const app = express();
+app.use(express.static(profilePath))
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+
 
 app.post("/api/signup",uploadAvatar,signupMiddleware.emailOrPhone,signupMiddleware.details,signupMiddleware.exists,signup) //signup for 
 app.post("/api/login",loginMiddleware.emailOrPhone,loginMiddleware.details,loginMiddleware.exists,loginMiddleware.passwordCheck,login) //getting token if user exists
 app.get("/api",viewMiddleware.token,viewMiddleware.validToken,viewMiddleware.exists,view) //reading data if user exists
-app.put("/api",updateMiddleware.token,updateMiddleware.validToken,updateMiddleware.exists,updateMiddleware.update,updateMiddleware.name,update) //updating data if user exists
+app.put("/api",uploadAvatar,updateMiddleware.token,updateMiddleware.validToken,updateMiddleware.exists,updateMiddleware.update,updateMiddleware.name,update) //updating data if user exists
 app.delete("/api",deleteMiddleware.token,deleteMiddleware.validToken,deleteMiddleware.exists,delet) //deleting user if user exists
 
 app.get("/api/admin/users",viewUsersMiddleware.token,viewUsersMiddleware.validToken,viewUsersMiddleware.role,viewUsersMiddleware.exists,viewUsers) //reading all users details if admin exists
 app.delete("/api/admin/users",deleteUsersMiddleware.token,deleteUsersMiddleware.validToken,deleteUsersMiddleware.role,deleteUsersMiddleware.exists,deleteUsers)
-app.put("/api/admin/user",updateUserMiddleware.token,updateUserMiddleware.validToken,updateUserMiddleware.role,updateUserMiddleware.exists,updateUserMiddleware.emailOrPhone,updateUserMiddleware.userExists,updateUserMiddleware.update,updateUserMiddleware.name,updateUser) //reading particular user if admin exists
+app.put("/api/admin/user",uploadAvatar,updateUserMiddleware.token,updateUserMiddleware.validToken,updateUserMiddleware.role,updateUserMiddleware.exists,updateUserMiddleware.emailOrPhone,updateUserMiddleware.userExists,updateUserMiddleware.update,updateUserMiddleware.name,updateUser) //reading particular user if admin exists
 app.get("/api/admin/user",viewUserMiddleware.token,viewUserMiddleware.validToken,viewUserMiddleware.role,viewUserMiddleware.exists,viewUserMiddleware.emailOrPhone,viewUserMiddleware.userExists,viewUser) //reading particular user if admin exists
 app.delete("/api/admin/user",deleteUserMiddleware.token,deleteUserMiddleware.validToken,deleteUserMiddleware.role,deleteUserMiddleware.exists,deleteUserMiddleware.emailOrPhone,deleteUserMiddleware.userExists,deleteUser) //reading particular user if admin exists
 

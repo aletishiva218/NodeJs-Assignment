@@ -9,7 +9,7 @@ const updateUser = async (req,res) => {
             const updateData = {};
             
             if(req.body.name) updateData.name = req.body.name;
-            if(req.file) updateData.profilePath = req.file.path;
+            if(req.file) updateData.profilePath = req.headers.host+"/"+req.file.path.split("\\")[1];
 
             await userModel.updateOne(userCredintials,{$set:updateData})
             
